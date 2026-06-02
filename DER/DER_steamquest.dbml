@@ -1,0 +1,223 @@
+// =====================================================================
+// SteamQuest - DER (Diagrama Entidade-Relacionamento)
+// Trabalho de Banco de Dados - 4o semestre UCDB
+// Formato: dbdiagram.io (DBML)
+// Como visualizar: cole o conteudo deste arquivo em https://dbdiagram.io
+// =====================================================================
+
+Project SteamQuest {
+  database_type: 'PostgreSQL'
+  Note: '''
+    E-commerce ficticio de jogos digitais inspirado na Steam.
+    Controla usuarios, jogos, keys digitais limitadas, pedidos,
+    pagamentos, biblioteca, avaliacoes e auditoria de preco.
+  '''
+}
+
+// ---------------------------------------------------------------------
+// USUARIO
+// ---------------------------------------------------------------------
+Table usuario {
+  id              bigserial    [pk]
+  nome            varchar(120) [not null]
+  email           varchar(150) [not null, unique]
+  senha_hash      varchar(255) [not null]
+  cpf             varchar(14)  [not null, unique]
+  data_nascimento date         [not null]
+  data_cadastro   timestamp    [not null, default: `CURRENT_TIMESTAMP`]
+  ativo           boolean      [not null, default: true]
+
+  Note: 'Cliente da plataforma. Email e CPF unicos.'
+}
+
+// ---------------------------------------------------------------------
+// DESENVOLVEDORA / PUBLICADORA
+// ---------------------------------------------------------------------
+Table desenvolvedora {
+  id            bigserial    [pk]
+  nome          varchar(120) [not null, unique]
+  pais          varchar(60)
+  ano_fundacao  int
+
+  Note: 'Estudio que desenvolve o jogo.'
+}
+
+Table publicadora {
+  id    bigserial    [pk]
+  nome  varchar(120) [not null, unique]
+  pais  varchar(60)
+
+  Note: 'Empresa que publica/distribui o jogo.'
+}
+
+// ---------------------------------------------------------------------
+// JOGO
+// ---------------------------------------------------------------------
+Table jogo {
+  id                bigserial      [pk]
+  titulo            varchar(150)   [not null]
+  descricao         text
+  preco             numeric(10,2)  [not null, note: 'CHECK (preco >= 0)']
+  data_lancamento   date
+  desenvolvedora_id bigint         [not null, ref: > desenvolvedora.id]
+  publicadora_id    bigint         [not null, ref: > publicadora.id]
+  ativo             boolean        [not null, default: true]
+
+  Indexes {
+    titulo
+    (desenvolvedora_id)
+    (publicadora_id)
+  }
+
+  Note: 'Catalogo de jogos digitais a venda.'
+}
+
+// ---------------------------------------------------------------------
+// CATEGORIA / GENERO  (N:N com jogo)
+// ---------------------------------------------------------------------
+Table categoria {
+  id        bigserial    [pk]
+  nome      varchar(80)  [not null, unique]
+  descricao varchar(200)
+
+  Note: 'Genero/categoria de jogo (RPG, FPS, Indie, etc).'
+}
+
+Table jogo_categoria {
+  jogo_id      bigint [not null, ref: > jogo.id]
+  categoria_id bigint [not null, ref: > categoria.id]
+
+  Indexes {
+    (jogo_id, categoria_id) [pk]
+  }
+
+  Note: 'Tabela associativa N:N entre jogo e categoria.'
+}
+
+// ---------------------------------------------------------------------
+// KEY_JOGO  (key digital limitada por jogo)
+// ---------------------------------------------------------------------
+Table key_jogo {
+  id           bigserial    [pk]
+  jogo_id      bigint       [not null, ref: > jogo.id]
+  codigo_key   varchar(64)  [not null, unique, note: 'Codigo unico da key digital']
+  status       varchar(15)  [not null, default: 'disponivel', note: "CHECK IN ('disponivel','reservada','vendida','cancelada')"]
+  data_criacao timestamp    [not null, default: `CURRENT_TIMESTAMP`]
+  data_venda   timestamp
+
+  Indexes {
+    (jogo_id, status)
+  }
+
+  Note: '''
+    Key digital de um jogo.
+    Cada key e unica e nao pode ser vendida duas vezes.
+    Trigger garante transicao valida de status.
+  '''
+}
+
+// ---------------------------------------------------------------------
+// PEDIDO / ITEM_PEDIDO
+// ---------------------------------------------------------------------
+Table pedido {
+  id           bigserial      [pk]
+  usuario_id   bigint         [not null, ref: > usuario.id]
+  data_pedido  timestamp      [not null, default: `CURRENT_TIMESTAMP`]
+  status       varchar(15)    [not null, default: 'pendente', note: "CHECK IN ('pendente','pago','finalizado','cancelado')"]
+  valor_total  numeric(10,2)  [not null, default: 0, note: 'Calculado por trigger via item_pedido']
+
+  Indexes {
+    (usuario_id, data_pedido)
+  }
+
+  Note: 'Pedido feito por um usuario.'
+}
+
+Table item_pedido {
+  id              bigserial      [pk]
+  pedido_id       bigint         [not null, ref: > pedido.id]
+  jogo_id         bigint         [not null, ref: > jogo.id]
+  key_id          bigint         [unique, ref: - key_jogo.id, note: 'Key reservada/vendida para este item (1:1)']
+  preco_unitario  numeric(10,2)  [not null, note: 'CHECK (preco_unitario >= 0)']
+  quantidade      int            [not null, default: 1, note: 'CHECK (quantidade > 0)']
+
+  Indexes {
+    (pedido_id)
+    (pedido_id, jogo_id) [unique, note: 'Evita o mesmo jogo duplicado no mesmo pedido']
+  }
+
+  Note: 'Item individual de um pedido. Liga jogo + key.'
+}
+
+// ---------------------------------------------------------------------
+// PAGAMENTO
+// ---------------------------------------------------------------------
+Table pagamento {
+  id              bigserial      [pk]
+  pedido_id       bigint         [not null, ref: > pedido.id]
+  metodo          varchar(20)    [not null, note: "CHECK IN ('cartao','pix','boleto')"]
+  status          varchar(15)    [not null, default: 'pendente', note: "CHECK IN ('pendente','aprovado','recusado','estornado')"]
+  valor_pago      numeric(10,2)  [not null, note: 'CHECK (valor_pago >= 0)']
+  data_pagamento  timestamp
+
+  Indexes {
+    (pedido_id)
+  }
+
+  Note: 'Pagamento associado a um pedido.'
+}
+
+// ---------------------------------------------------------------------
+// BIBLIOTECA_USUARIO
+// ---------------------------------------------------------------------
+Table biblioteca_usuario {
+  id              bigserial  [pk]
+  usuario_id      bigint     [not null, ref: > usuario.id]
+  jogo_id         bigint     [not null, ref: > jogo.id]
+  key_id          bigint     [not null, unique, ref: - key_jogo.id]
+  data_aquisicao  timestamp  [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (usuario_id)
+    (usuario_id, key_id) [unique, note: 'Usuario nao recebe a mesma key duas vezes']
+  }
+
+  Note: 'Jogos que o usuario possui apos finalizar pedido.'
+}
+
+// ---------------------------------------------------------------------
+// AVALIACAO_JOGO
+// ---------------------------------------------------------------------
+Table avaliacao_jogo {
+  id          bigserial   [pk]
+  usuario_id  bigint      [not null, ref: > usuario.id]
+  jogo_id     bigint      [not null, ref: > jogo.id]
+  nota        int         [not null, note: 'CHECK (nota BETWEEN 1 AND 5)']
+  comentario  text
+  data        timestamp   [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (jogo_id)
+    (usuario_id, jogo_id) [unique, note: 'Uma avaliacao por usuario/jogo']
+  }
+
+  Note: 'Avaliacao de um jogo por um usuario (1 a 5).'
+}
+
+// ---------------------------------------------------------------------
+// AUDITORIA_PRECO_JOGO
+// ---------------------------------------------------------------------
+Table auditoria_preco_jogo {
+  id               bigserial      [pk]
+  jogo_id          bigint         [not null, ref: > jogo.id]
+  preco_antigo     numeric(10,2)  [not null]
+  preco_novo       numeric(10,2)  [not null]
+  usuario_db       varchar(80)    [not null, note: 'CURRENT_USER do PostgreSQL']
+  data_alteracao   timestamp      [not null, default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    (jogo_id)
+  }
+
+  Note: 'Log de alteracoes de preco gerado por trigger AFTER UPDATE em jogo.preco.'
+}
