@@ -30,11 +30,16 @@ E-commerce fictício de jogos digitais inspirado na Steam. Controla usuários, j
 
 ## Descrição do sistema
 
-<!-- DUPLA 1-2 — preencher -->
-<!-- Explicar em 1-2 parágrafos o que é o SteamQuest, o que o banco controla
-     e qual o diferencial (key digital única e limitada por jogo). -->
+O SteamQuest é uma plataforma fictícia de e-commerce de jogos digitais
+inspirada na Steam. O banco modela o ciclo completo de venda: catálogo
+de jogos, controle de keys digitais limitadas, pedidos, pagamentos,
+biblioteca do usuário e avaliações.
 
-_A preencher pela Dupla 1-2._
+O diferencial do modelo é o controle rigoroso de keys: cada jogo possui
+um estoque finito de chaves digitais únicas. Uma key vendida nunca pode
+ser revendida, e o pedido só é finalizado se houver key disponível para
+cada item — garantia feita pela transação `fn_finalizar_pedido`.
+
 
 ---
 
@@ -46,7 +51,7 @@ _A preencher pela Dupla 1-2._
 | #   | Nome completo  | Dupla | Contribuição                          |
 | --- | -------------- | ----- | ------------------------------------- |
 | 01  | Heitor Fidelis | 1-2   | DER + script 01 de criação de tabelas |
-| 02  | _A preencher_  | 1-2   | _A preencher_                         |
+| 02  | Felipe Rodrigues | 1-2   | DER do SteamQuest em DBML + imagem exportada + Atualização do README                        |
 | 03  | _A preencher_  | 3-4   | _A preencher_                         |
 | 04  | _A preencher_  | 3-4   | _A preencher_                         |
 | 05  | _A preencher_  | 5-6   | _A preencher_                         |
@@ -68,17 +73,14 @@ _A preencher pela Dupla 1-2._
      3. Inserir a imagem abaixo -->
 
 - Arquivo-fonte: [der/steamquest.dbml](der/steamquest.dbml)
-- Link de visualização: _A preencher_
-- Imagem:
+- Link de visualização:(https://dbdiagram.io/d/6a1f1c57f15b4b04525b11d8)
+- Imagem: ![alt text](Prints/DER_steamquest.png)
 
-![DER do SteamQuest](der/steamquest.png)
 
 ---
 
 ## Tabelas
 
-<!-- DUPLA 1-2 — preencher -->
-<!-- Manter a tabela abaixo; só conferir/ajustar as descrições. -->
 
 | Tabela                 | Descrição                                                     |
 | ---------------------- | ------------------------------------------------------------- |
