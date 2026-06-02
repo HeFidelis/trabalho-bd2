@@ -1,0 +1,62 @@
+# =====================================================================
+# SteamQuest - .gitignore
+# =====================================================================
+
+# ----- Sistema operacional -----
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ----- Editores / IDEs -----
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+.history/
+
+# ----- PostgreSQL / ferramentas de banco -----
+# Backups e dumps locais (nao commitar dados de teste pesados)
+*.backup
+*.dump
+*.sql.bak
+*.tar
+
+# pgAdmin
+pgadmin.db
+pgadmin4.db
+
+# DBeaver
+.dbeaver/
+.dbeaver-data-sources*.xml
+
+# pgModeler (caso alguem use junto com o dbdiagram)
+*.dbm.bak
+
+# ----- Credenciais (NUNCA commitar) -----
+.env
+.env.local
+.env.*.local
+*.pgpass
+config.local.*
+secrets.*
+
+# ----- Logs -----
+*.log
+logs/
+
+# ----- Outros -----
+*.tmp
+*.temp
