@@ -224,8 +224,8 @@ _A preencher pela Dupla 5-6._
 
 | Role          | Permissões    |
 | ------------- | ------------- |
-| `admin_sq`    | _A preencher_ |
-| `operador_sq` | _A preencher_ |
+| `admin_sq`    | Role administrativa do sistema. Possui permissão de `SELECT`, `INSERT`, `UPDATE` e `DELETE` em todas as tabelas do schema `public`, além de permissão de uso, consulta e atualização das sequences.  |
+| `operador_sq` | Role voltada para operadores internos da plataforma. Pode consultar usuários, gerenciar catálogo, desenvolvedoras, publicadoras, categorias, jogos, keys, pedidos, itens, pagamentos e biblioteca. Possui permissão de `SELECT`, `INSERT` e `UPDATE` nas tabelas operacionais, apenas `SELECT` em avaliações e auditoria de preços, e não possui permissão de `DELETE`. |
 | `cliente_sq`  | _A preencher_ |
 
 ---
