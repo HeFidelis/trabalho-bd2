@@ -54,8 +54,8 @@ cada item — garantia feita pela transação `fn_finalizar_pedido`.
 | 02  | Felipe Rodrigues | 1-2   | DER do SteamQuest em DBML + imagem exportada + Atualização do README                        |
 | 03  | Gabriel Felix  | 3-4   | Criação do script 03 de índices do banco de dados |
 | 04  | Guilherme Acosta | 3-4   | Documentação dos índices e atualização do README |
-| 05  | _A preencher_  | 5-6   | _A preencher_                         |
-| 06  | _A preencher_  | 5-6   | _A preencher_                         |
+| 05  | Pietra Viegas  | 5-6   | Criação das roles admin_sq e operador_sq com definição de GRANTs e permissões administrativas/operacionais. Documentação das roles admin_sq e operador_sq no README.                      |
+| 06  | Kailani Menezes | 5-6   | Criação da role cliente_sq com definição de GRANTs e REVOKEs para acesso controlado aos recursos da plataforma. Documentação da role cliente_sq e da estratégia de segurança baseada no princípio do menor privilégio.                        |
 | 07  | _A preencher_  | 7-8   | _A preencher_                         |
 | 08  | _A preencher_  | 7-8   | _A preencher_                         |
 | 09  | _A preencher_  | 9-10  | _A preencher_                         |
@@ -118,7 +118,7 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 | ----------------------------------- | ----------- | ----------- |
 | `01_criacao_tabelas.sql`            | Dupla 1-2   | ✅ Pronto   |
 | `03_indices.sql`                    | Dupla 3-4   | ✅ Pronto   |
-| `04_roles_permissoes.sql`           | Dupla 5-6   | ⬜ Pendente |
+| `04_roles_permissoes.sql`           | Dupla 5-6   | ⬜ Pronto |
 | `05_funcoes_triggers.sql`           | Dupla 7-8   | ⬜ Pendente |
 | `06_views_relatorios.sql`           | Dupla 11-12 | ⬜ Pendente |
 | `07_dados_iniciais.sql`             | Dupla 11-12 | ⬜ Pendente |
@@ -234,7 +234,7 @@ _A preencher pela Dupla 5-6._
 | ------------- | ------------- |
 | `admin_sq`    | Role administrativa do sistema. Possui permissão de `SELECT`, `INSERT`, `UPDATE` e `DELETE` em todas as tabelas do schema `public`, além de permissão de uso, consulta e atualização das sequences.  |
 | `operador_sq` | Role voltada para operadores internos da plataforma. Pode consultar usuários, gerenciar catálogo, desenvolvedoras, publicadoras, categorias, jogos, keys, pedidos, itens, pagamentos e biblioteca. Possui permissão de `SELECT`, `INSERT` e `UPDATE` nas tabelas operacionais, apenas `SELECT` em avaliações e auditoria de preços, e não possui permissão de `DELETE`. |
-| `cliente_sq`  | _A preencher_ |
+| `cliente_sq`  | Role clientes da plataforma. Possui permissão de SELECT no catálogo de jogos, categorias, desenvolvedoras e publicadoras. Pode consultar sua biblioteca, realizar consultas e registros de pedidos, além de cadastrar avaliações de jogos. Possui permissão de SELECT e UPDATE em seus dados de usuário. Não possui acesso às tabelas de auditoria e keys digitais, nem permissões de DELETE, seguindo o princípio do menor privilégio. |
 
 ---
 
