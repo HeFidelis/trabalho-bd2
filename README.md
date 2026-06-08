@@ -118,7 +118,7 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 | ----------------------------------- | ----------- | ----------- |
 | `01_criacao_tabelas.sql`            | Dupla 1-2   | ✅ Pronto   |
 | `03_indices.sql`                    | Dupla 3-4   | ✅ Pronto   |
-| `04_roles_permissoes.sql`           | Dupla 5-6   | ⬜ Pronto |
+| `04_roles_permissoes.sql`           | Dupla 5-6   | ✅ Pronto |
 | `05_funcoes_triggers.sql`           | Dupla 7-8   | ⬜ Pendente |
 | `06_views_relatorios.sql`           | Dupla 11-12 | ⬜ Pendente |
 | `07_dados_iniciais.sql`             | Dupla 11-12 | ⬜ Pendente |
