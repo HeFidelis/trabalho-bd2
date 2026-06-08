@@ -52,8 +52,8 @@ cada item — garantia feita pela transação `fn_finalizar_pedido`.
 | --- | -------------- | ----- | ------------------------------------- |
 | 01  | Heitor Fidelis | 1-2   | DER + script 01 de criação de tabelas |
 | 02  | Felipe Rodrigues | 1-2   | DER do SteamQuest em DBML + imagem exportada + Atualização do README                        |
-| 03  | _A preencher_  | 3-4   | _A preencher_                         |
-| 04  | _A preencher_  | 3-4   | _A preencher_                         |
+| 03  | Gabriel Felix  | 3-4   | Criação do script 03 de índices do banco de dados |
+| 04  | Guilherme Acosta | 3-4   | Documentação dos índices e atualização do README |
 | 05  | _A preencher_  | 5-6   | _A preencher_                         |
 | 06  | _A preencher_  | 5-6   | _A preencher_                         |
 | 07  | _A preencher_  | 7-8   | _A preencher_                         |
@@ -117,7 +117,7 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 | Script                              | Responsável | Status      |
 | ----------------------------------- | ----------- | ----------- |
 | `01_criacao_tabelas.sql`            | Dupla 1-2   | ✅ Pronto   |
-| `03_indices.sql`                    | Dupla 3-4   | ⬜ Pendente |
+| `03_indices.sql`                    | Dupla 3-4   | ✅ Pronto   |
 | `04_roles_permissoes.sql`           | Dupla 5-6   | ⬜ Pendente |
 | `05_funcoes_triggers.sql`           | Dupla 7-8   | ⬜ Pendente |
 | `06_views_relatorios.sql`           | Dupla 11-12 | ⬜ Pendente |
@@ -210,7 +210,15 @@ git config user.email
      - TABELA e colunas
      - QUAL consulta ele acelera (justificativa) -->
 
-_A preencher pela Dupla 3-4._
+- **`idx_key_jogo_jogo_status`** (`key_jogo(jogo_id, status)`) — Acelera a busca de chaves digitais disponíveis (filtradas por status) para um determinado jogo, otimizando o processo de venda.
+- **`idx_pedido_usuario`** (`pedido(usuario_id)`) — Acelera a consulta e exibição do histórico de pedidos de um usuário na plataforma.
+- **`idx_pedido_status`** (`pedido(status)`) — Otimiza relatórios e consultas que filtram pedidos pelo estado da compra (ex: pendente, finalizado, cancelado).
+- **`idx_item_pedido_pedido`** (`item_pedido(pedido_id)`) — Agiliza a busca de todos os itens vinculados a um pedido específico ao exibir os detalhes do carrinho ou da compra.
+- **`idx_item_pedido_jogo`** (`item_pedido(jogo_id)`) — Acelera consultas de vendas e estatísticas de popularidade por jogo.
+- **`idx_biblioteca_usuario`** (`biblioteca_usuario(usuario_id)`) — Acelera a listagem de jogos que pertencem à biblioteca de um usuário específico.
+- **`idx_avaliacao_jogo`** (`avaliacao_jogo(jogo_id)`) — Otimiza consultas para calcular a média de notas de um jogo e listar suas avaliações correspondentes.
+- **`idx_avaliacao_usuario`** (`avaliacao_jogo(usuario_id)`) — Acelera a busca de todas as avaliações que um usuário específico realizou.
+- **`idx_jogo_titulo`** (`jogo(titulo)`) — Otimiza a pesquisa de jogos por título na barra de buscas da loja, acelerando a filtragem por texto.
 
 ---
 
