@@ -167,7 +167,13 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 
 | Aluno   | Commit 1 (feat)                                    | Commit 2 (feat / docs)                                 |
 | ------- | -------------------------------------------------- | ------------------------------------------------------ |
-| Aluno A | `feat: trigger de auditoria de preco`              | `feat: trigger de calculo de valor_total no pedido`    |
+| Aluno A | - **`trg_auditoria_preco_jogo`** — Trigger AFTER UPDATE na tabela `jogo`. Registra automaticamente alterações de preço na tabela `auditoria_preco_jogo`, armazenando o valor antigo, o novo valor, o usuário do banco e a data da alteração.
+
+- **`trg_recalcular_valor_total`** — Trigger AFTER INSERT, UPDATE ou DELETE na tabela `item_pedido`. Recalcula automaticamente o campo `valor_total` da tabela `pedido`, garantindo que o total reflita corretamente os itens associados ao pedido.
+
+- **`trg_key_validacao`** — _A preencher_
+
+- **`trg_biblioteca_pos_pedido`** — _A preencher_   |
 | Aluno B | `feat: trigger de validacao de status em key_jogo` | `feat: trigger biblioteca pos-pedido + docs no README` |
 
 ### 🟥 Dupla 9-10 — Transação de Finalizar Pedido
