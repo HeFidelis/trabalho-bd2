@@ -56,7 +56,7 @@ cada item — garantia feita pela transação `fn_finalizar_pedido`.
 | 04  | Guilherme Acosta | 3-4   | Documentação dos índices e atualização do README |
 | 05  | Pietra Viegas  | 5-6   | Criação das roles admin_sq e operador_sq com definição de GRANTs e permissões administrativas/operacionais. Documentação das roles admin_sq e operador_sq no README.                      |
 | 06  | Kailani Menezes | 5-6   | Criação da role cliente_sq com definição de GRANTs e REVOKEs para acesso controlado aos recursos da plataforma. Documentação da role cliente_sq e da estratégia de segurança baseada no princípio do menor privilégio.                        |
-| 07  | _A preencher_  | 7-8   | _A preencher_                         |
+| 07 | Luis Felipe Andrade | 7-8 | Implementação da trigger de auditoria de preço (trg_auditoria_preco_jogo), responsável por registrar alterações de preço dos jogos na tabela de auditoria. Implementação da trigger de recálculo automático do valor_total dos pedidos (trg_recalcular_valor_total) e documentação das triggers no README.
 | 08  | _A preencher_  | 7-8   | _A preencher_                         |
 | 09  | _A preencher_  | 9-10  | _A preencher_                         |
 | 10  | _A preencher_  | 9-10  | _A preencher_                         |
