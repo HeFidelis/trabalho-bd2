@@ -249,6 +249,17 @@ _A preencher pela Dupla 5-6._
 _A preencher pela Dupla 7-8._
 
 - **`trg_auditoria_preco_jogo`** — Trigger AFTER UPDATE na tabela `jogo`. Registra automaticamente alterações de preço na tabela `auditoria_preco_jogo`, armazenando o valor antigo, o novo valor, o usuário do banco e a data da alteração.
+<<<<<<< HEAD
+=======
+
+- **`trg_recalcular_valor_total`** — Trigger AFTER INSERT, UPDATE ou DELETE na tabela `item_pedido`. Recalcula automaticamente o campo `valor_total` da tabela `pedido`, garantindo que o total reflita corretamente os itens associados ao pedido.
+
+- **`trg_key_validacao`** — Trigger BEFORE UPDATE na tabela key_jogo.
+Impede que uma key marcada como vendida retorne para outro status, garantindo a integridade do estoque digital e evitando a reutilização de chaves já comercializadas.
+
+- **`trg_biblioteca_pos_pedido`** — Trigger AFTER UPDATE na tabela pedido.
+Quando um pedido é finalizado, adiciona automaticamente os jogos adquiridos à biblioteca do usuário, garantindo que a biblioteca reflita corretamente as compras 
+>>>>>>> a62dcc91cf21d66b17da4fe8209f0fc4e907ac6f
 
 - **`trg_recalcular_valor_total`** — Trigger AFTER INSERT, UPDATE ou DELETE na tabela `item_pedido`. Recalcula automaticamente o campo `valor_total` da tabela `pedido`, garantindo que o total reflita corretamente os itens associados ao pedido.
 
