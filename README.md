@@ -40,7 +40,6 @@ um estoque finito de chaves digitais únicas. Uma key vendida nunca pode
 ser revendida, e o pedido só é finalizado se houver key disponível para
 cada item — garantia feita pela transação `fn_finalizar_pedido`.
 
-
 ---
 
 ## Integrantes
@@ -48,20 +47,20 @@ cada item — garantia feita pela transação `fn_finalizar_pedido`.
 > Cada aluno edita **apenas a sua linha**. A contribuição deve descrever o que
 > foi efetivamente feito (script, trigger, view, etc).
 
-| #   | Nome completo  | Dupla | Contribuição                          |
-| --- | -------------- | ----- | ------------------------------------- |
-| 01  | Heitor Fidelis | 1-2   | DER + script 01 de criação de tabelas |
-| 02  | Felipe Rodrigues | 1-2   | DER do SteamQuest em DBML + imagem exportada + Atualização do README                        |
-| 03  | Gabriel Felix  | 3-4   | Criação do script 03 de índices do banco de dados |
-| 04  | Guilherme Acosta | 3-4   | Documentação dos índices e atualização do README |
-| 05  | Pietra Viegas  | 5-6   | Criação das roles admin_sq e operador_sq com definição de GRANTs e permissões administrativas/operacionais. Documentação das roles admin_sq e operador_sq no README.                      |
-| 06  | Kailani Menezes | 5-6   | Criação da role cliente_sq com definição de GRANTs e REVOKEs para acesso controlado aos recursos da plataforma. Documentação da role cliente_sq e da estratégia de segurança baseada no princípio do menor privilégio.                        |
-| 07 | Luis Felipe Andrade | 7-8 | Implementação da trigger de auditoria de preço (trg_auditoria_preco_jogo), responsável por registrar alterações de preço dos jogos na tabela de auditoria. Implementação da trigger de recálculo automático do valor_total dos pedidos (trg_recalcular_valor_total) e documentação das triggers no README.
-| 08  | Vinícius Loureiro Cardoso  | 7-8   | Implementação das triggers trg_key_validacao e trg_biblioteca_pos_pedido. Documentação das triggers no README.                         |
-| 09  | _A preencher_  | 9-10  | _A preencher_                         |
-| 10  | _A preencher_  | 9-10  | _A preencher_                         |
-| 11  | _A preencher_  | 11-12 | _A preencher_                         |
-| 12  | _A preencher_  | 11-12 | _A preencher_                         |
+| #   | Nome completo             | Dupla | Contribuição                                                                                                                                                                                                                                                                                               |
+| --- | ------------------------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 01  | Heitor Fidelis            | 1-2   | DER + script 01 de criação de tabelas                                                                                                                                                                                                                                                                      |
+| 02  | Felipe Rodrigues          | 1-2   | DER do SteamQuest em DBML + imagem exportada + Atualização do README                                                                                                                                                                                                                                       |
+| 03  | Gabriel Felix             | 3-4   | Criação do script 03 de índices do banco de dados                                                                                                                                                                                                                                                          |
+| 04  | Guilherme Acosta          | 3-4   | Documentação dos índices e atualização do README                                                                                                                                                                                                                                                           |
+| 05  | Pietra Viegas             | 5-6   | Criação das roles admin_sq e operador_sq com definição de GRANTs e permissões administrativas/operacionais. Documentação das roles admin_sq e operador_sq no README.                                                                                                                                       |
+| 06  | Kailani Menezes           | 5-6   | Criação da role cliente_sq com definição de GRANTs e REVOKEs para acesso controlado aos recursos da plataforma. Documentação da role cliente_sq e da estratégia de segurança baseada no princípio do menor privilégio.                                                                                     |
+| 07  | Luis Felipe Andrade       | 7-8   | Implementação da trigger de auditoria de preço (trg_auditoria_preco_jogo), responsável por registrar alterações de preço dos jogos na tabela de auditoria. Implementação da trigger de recálculo automático do valor_total dos pedidos (trg_recalcular_valor_total) e documentação das triggers no README. |
+| 08  | Vinícius Loureiro Cardoso | 7-8   | Implementação das triggers trg_key_validacao e trg_biblioteca_pos_pedido. Documentação das triggers no README.                                                                                                                                                                                             |
+| 09  | _A preencher_             | 9-10  | _A preencher_                                                                                                                                                                                                                                                                                              |
+| 10  | _A preencher_             | 9-10  | _A preencher_                                                                                                                                                                                                                                                                                              |
+| 11  | _A preencher_             | 11-12 | _A preencher_                                                                                                                                                                                                                                                                                              |
+| 12  | _A preencher_             | 11-12 | _A preencher_                                                                                                                                                                                                                                                                                              |
 
 ---
 
@@ -76,11 +75,9 @@ cada item — garantia feita pela transação `fn_finalizar_pedido`.
 - Link de visualização:(https://dbdiagram.io/d/6a1f1c57f15b4b04525b11d8)
 - Imagem: ![alt text](Prints/DER_steamquest.png)
 
-
 ---
 
 ## Tabelas
-
 
 | Tabela                 | Descrição                                                     |
 | ---------------------- | ------------------------------------------------------------- |
@@ -118,8 +115,8 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 | ----------------------------------- | ----------- | ----------- |
 | `01_criacao_tabelas.sql`            | Dupla 1-2   | ✅ Pronto   |
 | `03_indices.sql`                    | Dupla 3-4   | ✅ Pronto   |
-| `04_roles_permissoes.sql`           | Dupla 5-6   | ✅ Pronto |
-| `05_funcoes_triggers.sql`           | Dupla 7-8   | ⬜ Pendente |
+| `04_roles_permissoes.sql`           | Dupla 5-6   | ✅ Pronto   |
+| `05_funcoes_triggers.sql`           | Dupla 7-8   | ✅ Pronto   |
 | `06_views_relatorios.sql`           | Dupla 11-12 | ⬜ Pendente |
 | `07_dados_iniciais.sql`             | Dupla 11-12 | ⬜ Pendente |
 | `08_transacao_finalizar_pedido.sql` | Dupla 9-10  | ⬜ Pendente |
@@ -165,10 +162,10 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 
 ### 🟪 Dupla 7-8 — Triggers e Funções
 
-| Aluno   | Commit 1 (feat)                                    | Commit 2 (feat / docs)                                 |
-| ------- | -------------------------------------------------- | ------------------------------------------------------ |
-| Aluno A | `feat: trigger auditoria preço do jogo preco_jogo `| `feat: trigger recalcular valor total + docs no README`|
-| Aluno B | `feat: trigger de validacao de status em key_jogo` | `feat: trigger biblioteca pos-pedido + docs no README` |
+| Aluno   | Commit 1 (feat)                                     | Commit 2 (feat / docs)                                  |
+| ------- | --------------------------------------------------- | ------------------------------------------------------- |
+| Aluno A | `feat: trigger auditoria preço do jogo preco_jogo ` | `feat: trigger recalcular valor total + docs no README` |
+| Aluno B | `feat: trigger de validacao de status em key_jogo`  | `feat: trigger biblioteca pos-pedido + docs no README`  |
 
 ### 🟥 Dupla 9-10 — Transação de Finalizar Pedido
 
@@ -228,12 +225,10 @@ git config user.email
 <!-- Tabela com as 3 roles criadas em scripts/04_roles_permissoes.sql.
      Para cada uma, explicar: o que pode SELECT, INSERT, UPDATE, DELETE. -->
 
-_A preencher pela Dupla 5-6._
-
-| Role          | Permissões    |
-| ------------- | ------------- |
-| `admin_sq`    | Role administrativa do sistema. Possui permissão de `SELECT`, `INSERT`, `UPDATE` e `DELETE` em todas as tabelas do schema `public`, além de permissão de uso, consulta e atualização das sequences.  |
-| `operador_sq` | Role voltada para operadores internos da plataforma. Pode consultar usuários, gerenciar catálogo, desenvolvedoras, publicadoras, categorias, jogos, keys, pedidos, itens, pagamentos e biblioteca. Possui permissão de `SELECT`, `INSERT` e `UPDATE` nas tabelas operacionais, apenas `SELECT` em avaliações e auditoria de preços, e não possui permissão de `DELETE`. |
+| Role          | Permissões                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `admin_sq`    | Role administrativa do sistema. Possui permissão de `SELECT`, `INSERT`, `UPDATE` e `DELETE` em todas as tabelas do schema `public`, além de permissão de uso, consulta e atualização das sequences.                                                                                                                                                                                                                                     |
+| `operador_sq` | Role voltada para operadores internos da plataforma. Pode consultar usuários, gerenciar catálogo, desenvolvedoras, publicadoras, categorias, jogos, keys, pedidos, itens, pagamentos e biblioteca. Possui permissão de `SELECT`, `INSERT` e `UPDATE` nas tabelas operacionais, apenas `SELECT` em avaliações e auditoria de preços, e não possui permissão de `DELETE`.                                                                 |
 | `cliente_sq`  | Role clientes da plataforma. Possui permissão de SELECT no catálogo de jogos, categorias, desenvolvedoras e publicadoras. Pode consultar sua biblioteca, realizar consultas e registros de pedidos, além de cadastrar avaliações de jogos. Possui permissão de SELECT e UPDATE em seus dados de usuário. Não possui acesso às tabelas de auditoria e keys digitais, nem permissões de DELETE, seguindo o princípio do menor privilégio. |
 
 ---
@@ -246,28 +241,14 @@ _A preencher pela Dupla 5-6._
      - EVENTO (BEFORE/AFTER, INSERT/UPDATE/DELETE, em qual tabela)
      - OBJETIVO (regra de negócio que ele garante) -->
 
-_A preencher pela Dupla 7-8._
-
 - **`trg_auditoria_preco_jogo`** — Trigger AFTER UPDATE na tabela `jogo`. Registra automaticamente alterações de preço na tabela `auditoria_preco_jogo`, armazenando o valor antigo, o novo valor, o usuário do banco e a data da alteração.
-<<<<<<< HEAD
-=======
 
 - **`trg_recalcular_valor_total`** — Trigger AFTER INSERT, UPDATE ou DELETE na tabela `item_pedido`. Recalcula automaticamente o campo `valor_total` da tabela `pedido`, garantindo que o total reflita corretamente os itens associados ao pedido.
 
-- **`trg_key_validacao`** — Trigger BEFORE UPDATE na tabela key_jogo.
-Impede que uma key marcada como vendida retorne para outro status, garantindo a integridade do estoque digital e evitando a reutilização de chaves já comercializadas.
+- **`trg_key_validacao`** — Trigger BEFORE UPDATE na tabela `key_jogo`. Impede que uma key marcada como vendida retorne para outro status, garantindo a integridade do estoque digital e evitando a reutilização de chaves já comercializadas.
 
-- **`trg_biblioteca_pos_pedido`** — Trigger AFTER UPDATE na tabela pedido.
-Quando um pedido é finalizado, adiciona automaticamente os jogos adquiridos à biblioteca do usuário, garantindo que a biblioteca reflita corretamente as compras 
->>>>>>> a62dcc91cf21d66b17da4fe8209f0fc4e907ac6f
+- **`trg_biblioteca_pos_pedido`** — Trigger AFTER UPDATE na tabela `pedido`. Quando um pedido é finalizado, adiciona automaticamente os jogos adquiridos à biblioteca do usuário, garantindo que a biblioteca reflita corretamente as compras.
 
-- **`trg_recalcular_valor_total`** — Trigger AFTER INSERT, UPDATE ou DELETE na tabela `item_pedido`. Recalcula automaticamente o campo `valor_total` da tabela `pedido`, garantindo que o total reflita corretamente os itens associados ao pedido.
-
-- **`trg_key_validacao`** — Trigger BEFORE UPDATE na tabela key_jogo.
-Impede que uma key marcada como vendida retorne para outro status, garantindo a integridade do estoque digital e evitando a reutilização de chaves já comercializadas.
-
-- **`trg_biblioteca_pos_pedido`** — Trigger AFTER UPDATE na tabela pedido.
-Quando um pedido é finalizado, adiciona automaticamente os jogos adquiridos à biblioteca do usuário, garantindo que a biblioteca reflita corretamente as compras 
 ---
 
 ## Transação de Finalizar Pedido
