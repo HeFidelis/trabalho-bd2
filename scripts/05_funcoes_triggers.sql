@@ -68,3 +68,36 @@ AFTER INSERT OR UPDATE OR DELETE
 ON item_pedido
 FOR EACH ROW
 EXECUTE FUNCTION fn_recalcular_valor_total();
+
+-- ============================================================
+-- Dupla 7-8 - Triggers e Funções
+-- Aluno B
+-- ============================================================
+
+-- ============================================================
+-- Trigger de Validar Status
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION fn_validar_status_key()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    IF OLD.status = 'vendida'
+       AND NEW.status <> 'vendida' THEN
+
+        RAISE EXCEPTION
+        'Uma key vendida nao pode retornar para outro status';
+
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_key_validacao
+BEFORE UPDATE
+ON key_jogo
+FOR EACH ROW
+EXECUTE FUNCTION fn_validar_status_key();
+
