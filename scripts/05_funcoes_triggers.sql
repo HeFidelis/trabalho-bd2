@@ -101,3 +101,38 @@ ON key_jogo
 FOR EACH ROW
 EXECUTE FUNCTION fn_validar_status_key();
 
+-- ============================================================
+-- Trigger de Biblioteca dos Pedidos do Usuário
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION fn_biblioteca_pos_pedido()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    IF OLD.status <> 'finalizado'
+       AND NEW.status = 'finalizado' THEN
+
+        INSERT INTO biblioteca_usuario (
+            usuario_id,
+            jogo_id,
+            key_id
+        )
+        SELECT
+            NEW.usuario_id,
+            ip.jogo_id,
+            ip.key_id
+        FROM item_pedido ip
+        WHERE ip.pedido_id = NEW.id;
+
+    END IF;
+
+    RETURN NEW;
+
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_biblioteca_pos_pedido
+AFTER UPDATE
+ON pedido
+FOR EACH ROW
+EXECUTE FUNCTION fn_biblioteca_pos_pedido();
