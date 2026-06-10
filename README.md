@@ -167,14 +167,19 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 
 | Aluno   | Commit 1 (feat)                                    | Commit 2 (feat / docs)                                 |
 | ------- | -------------------------------------------------- | ------------------------------------------------------ |
-| Aluno A | - **`trg_auditoria_preco_jogo`** — Trigger AFTER UPDATE na tabela `jogo`. Registra automaticamente alterações de preço na tabela `auditoria_preco_jogo`, armazenando o valor antigo, o novo valor, o usuário do banco e a data da alteração.
+| Aluno A | `feat: trigger auditoria preço do jogo preco_jogo `| `feat: trigger recalcular valor total + docs no README`|
+| Aluno B | `feat: trigger de validacao de status em key_jogo` | `feat: trigger biblioteca pos-pedido + docs no README` |
+
+- **`trg_auditoria_preco_jogo`** — Trigger AFTER UPDATE na tabela `jogo`. Registra automaticamente alterações de preço na tabela `auditoria_preco_jogo`, armazenando o valor antigo, o novo valor, o usuário do banco e a data da alteração.
 
 - **`trg_recalcular_valor_total`** — Trigger AFTER INSERT, UPDATE ou DELETE na tabela `item_pedido`. Recalcula automaticamente o campo `valor_total` da tabela `pedido`, garantindo que o total reflita corretamente os itens associados ao pedido.
 
-- **`trg_key_validacao`** — _A preencher_
+- **`trg_key_validacao`** — Trigger BEFORE UPDATE na tabela key_jogo.
+Impede que uma key marcada como vendida retorne para outro status, garantindo a integridade do estoque digital e evitando a reutilização de chaves já comercializadas.
 
-- **`trg_biblioteca_pos_pedido`** — _A preencher_   |
-| Aluno B | `feat: trigger de validacao de status em key_jogo` | `feat: trigger biblioteca pos-pedido + docs no README` |
+- **`trg_biblioteca_pos_pedido`** — Trigger AFTER UPDATE na tabela pedido.
+Quando um pedido é finalizado, adiciona automaticamente os jogos adquiridos à biblioteca do usuário, garantindo que a biblioteca reflita corretamente as compras 
+
 
 ### 🟥 Dupla 9-10 — Transação de Finalizar Pedido
 
