@@ -58,7 +58,7 @@ cada item — garantia feita pela transação `fn_finalizar_pedido`.
 | 07  | Luis Felipe Andrade       | 7-8   | Implementação da trigger de auditoria de preço (trg_auditoria_preco_jogo), responsável por registrar alterações de preço dos jogos na tabela de auditoria. Implementação da trigger de recálculo automático do valor_total dos pedidos (trg_recalcular_valor_total) e documentação das triggers no README. |
 | 08  | Vinícius Loureiro Cardoso | 7-8   | Implementação das triggers trg_key_validacao e trg_biblioteca_pos_pedido. Documentação das triggers no README.                                                                                                                                                                                             |
 | 09  | Lucas Daniel Duarte Cabral | 9-10  | Implementação da transação `fn_finalizar_pedido` (script 08) com lock do pedido via `SELECT ... FOR UPDATE`, validações de status, geração do pagamento aprovado e finalização do pedido (que dispara a carga automática da biblioteca). Criação do teste de exemplo de chamada bem-sucedida da transação. |
-| 10  | _A preencher_             | 9-10  | _A preencher_                                                                                                                                                                                                                                                                                              |
+| 10 | Pedro Ferreira Bastos | 9-10 | Implementação da reserva de keys utilizando `FOR UPDATE SKIP LOCKED`, evitando concorrência entre transações simultâneas. Tratamento de exceção para ausência de keys disponíveis, criação do teste de rollback e documentação da transação `fn_finalizar_pedido` no README. |                                                                                                                                                                                                                                                                                            |
 | 11  | _A preencher_             | 11-12 | _A preencher_                                                                                                                                                                                                                                                                                              |
 | 12  | _A preencher_             | 11-12 | _A preencher_                                                                                                                                                                                                                                                                                              |
 
@@ -119,7 +119,7 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 | `05_funcoes_triggers.sql`           | Dupla 7-8   | ✅ Pronto   |
 | `06_views_relatorios.sql`           | Dupla 11-12 | ⬜ Pendente |
 | `07_dados_iniciais.sql`             | Dupla 11-12 | ⬜ Pendente |
-| `08_transacao_finalizar_pedido.sql` | Dupla 9-10  | ⬜ Pendente |
+| `08_transacao_finalizar_pedido.sql` | Dupla 9-10  | ✅ Pronto |
 
 ---
 
@@ -261,7 +261,28 @@ git config user.email
      4. Como atualiza status, gera pagamento e dispara o trigger de biblioteca
      Incluir exemplo de chamada da função. -->
 
-_A preencher pela Dupla 9-10._
+A função `fn_finalizar_pedido()` é responsável por concluir o processo de compra de forma segura e consistente, garantindo a integridade dos dados mesmo em cenários de acesso concorrente ao banco de dados.
+
+- Utiliza `SELECT ... FOR UPDATE` para impedir que duas transações finalizem o mesmo pedido simultaneamente.
+- Reserva uma key disponível para cada item do pedido.
+- Utiliza `FOR UPDATE SKIP LOCKED` para evitar que duas transações concorrentes utilizem a mesma key.
+- Caso não exista key disponível para algum dos jogos do pedido, a função gera uma exceção (`RAISE EXCEPTION`), interrompendo a execução e garantindo o rollback automático da transação.
+- Após reservar as keys, registra o pagamento aprovado.
+- Por fim, altera o pedido para `finalizado`, disparando a trigger que adiciona os jogos à biblioteca do usuário.
+
+### Exemplo de chamada
+
+A função pode ser executada informando o ID do pedido e o método de pagamento:
+
+```sql
+SELECT fn_finalizar_pedido(1, 'pix');
+```
+
+Após a execução:
+- As keys são reservadas e marcadas como vendidas.
+- O pagamento é registrado como aprovado.
+- O pedido passa para o status `finalizado`.
+- Os jogos são adicionados automaticamente à biblioteca do usuário pela trigger `trg_biblioteca_pos_pedido`.
 
 ---
 
