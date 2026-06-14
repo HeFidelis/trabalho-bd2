@@ -64,19 +64,32 @@ BEGIN
          WHERE pedido_id = p_pedido_id
            AND key_id IS NULL
     LOOP
+    -- -------------------------------------------------------------
+    -- (Aluno B)
+    -- Controle de concorrencia utilizando FOR UPDATE SKIP LOCKED.
+    -- Evita que duas transacoes simultaneas reservem a mesma key.
+    -- Caso uma key ja esteja bloqueada por outra transacao,
+    -- ela sera ignorada e o PostgreSQL procurara outra disponivel.
+    -- -------------------------------------------------------------
         SELECT id
           INTO v_key_id
           FROM key_jogo
          WHERE jogo_id = v_item.jogo_id
-           AND status  = 'disponivel'
-         ORDER BY id
-         LIMIT 1
-           FOR UPDATE;
+          AND status  = 'disponivel'
+        ORDER BY id
+        LIMIT 1
+        FOR UPDATE SKIP LOCKED;
 
+     -- -------------------------------------------------------------
+        -- (Aluno B)
+        -- Caso nao exista key disponivel, a transacao deve falhar.
+        -- O PostgreSQL executara rollback automatico da operacao.
+        -- -------------------------------------------------------------
         IF v_key_id IS NULL THEN
             RAISE EXCEPTION
-                'Sem key disponivel para o jogo % (item %).',
-                v_item.jogo_id, v_item.id;
+                'Nao existem keys disponiveis para o jogo % (item %). Operacao cancelada.',
+                v_item.jogo_id,
+                v_item.id;
         END IF;
 
         -- Marca a key como vendida. A trigger trg_key_validacao garante
@@ -181,6 +194,89 @@ BEGIN
     ELSE
         RAISE EXCEPTION 'TESTE FALHOU: estado inesperado apos finalizar o pedido.';
     END IF;
+END $$;
+
+ROLLBACK;
+
+-- =====================================================================
+-- TESTE (Aluno B)
+-- Validacao de rollback quando nao existe key disponivel.
+-- =====================================================================
+
+BEGIN;
+
+DO $$
+DECLARE
+    v_dev_id BIGINT;
+    v_pub_id BIGINT;
+    v_jogo_id BIGINT;
+    v_usuario_id BIGINT;
+    v_pedido_id BIGINT;
+BEGIN
+
+    INSERT INTO desenvolvedora (nome)
+    VALUES ('Dev Sem Key')
+    RETURNING id INTO v_dev_id;
+
+    INSERT INTO publicadora (nome)
+    VALUES ('Pub Sem Key')
+    RETURNING id INTO v_pub_id;
+
+    INSERT INTO jogo (
+        titulo,
+        preco,
+        desenvolvedora_id,
+        publicadora_id
+    )
+    VALUES (
+        'Jogo Sem Estoque',
+        99.90,
+        v_dev_id,
+        v_pub_id
+    )
+    RETURNING id INTO v_jogo_id;
+
+    INSERT INTO usuario (
+        nome,
+        email,
+        senha_hash,
+        cpf,
+        data_nascimento
+    )
+    VALUES (
+        'Cliente Sem Key',
+        'cliente.semkey@steamquest.dev',
+        'hash_teste',
+        '999.999.999-99',
+        DATE '2000-01-01'
+    )
+    RETURNING id INTO v_usuario_id;
+
+    INSERT INTO pedido (usuario_id)
+    VALUES (v_usuario_id)
+    RETURNING id INTO v_pedido_id;
+
+    INSERT INTO item_pedido (
+        pedido_id,
+        jogo_id,
+        preco_unitario
+    )
+    VALUES (
+        v_pedido_id,
+        v_jogo_id,
+        99.90
+    );
+
+    -- Nao existe nenhuma key cadastrada para esse jogo.
+    -- A funcao deve gerar excecao e impedir a finalizacao.
+
+    PERFORM fn_finalizar_pedido(v_pedido_id);
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE
+        'TESTE OK - rollback executado: %',
+        SQLERRM;
 END $$;
 
 ROLLBACK;
