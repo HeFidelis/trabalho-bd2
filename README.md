@@ -58,9 +58,9 @@ cada item — garantia feita pela transação `fn_finalizar_pedido`.
 | 07  | Luis Felipe Andrade       | 7-8   | Implementação da trigger de auditoria de preço (trg_auditoria_preco_jogo), responsável por registrar alterações de preço dos jogos na tabela de auditoria. Implementação da trigger de recálculo automático do valor_total dos pedidos (trg_recalcular_valor_total) e documentação das triggers no README. |
 | 08  | Vinícius Loureiro Cardoso | 7-8   | Implementação das triggers trg_key_validacao e trg_biblioteca_pos_pedido. Documentação das triggers no README.                                                                                                                                                                                             |
 | 09  | Lucas Daniel Duarte Cabral | 9-10  | Implementação da transação `fn_finalizar_pedido` (script 08) com lock do pedido via `SELECT ... FOR UPDATE`, validações de status, geração do pagamento aprovado e finalização do pedido (que dispara a carga automática da biblioteca). Criação do teste de exemplo de chamada bem-sucedida da transação. |
-| 10 | Pedro Ferreira Bastos | 9-10 | Implementação da reserva de keys utilizando `FOR UPDATE SKIP LOCKED`, evitando concorrência entre transações simultâneas. Tratamento de exceção para ausência de keys disponíveis, criação do teste de rollback e documentação da transação `fn_finalizar_pedido` no README. |                                                                                                                                                                                                                                                                                            |
-| 11  | _A preencher_             | 11-12 | _A preencher_                                                                                                                                                                                                                                                                                              |
-| 12  | _A preencher_             | 11-12 | _A preencher_                                                                                                                                                                                                                                                                                              |
+| 10 | Pedro Ferreira Bastos | 9-10 | Implementação da reserva de keys utilizando `FOR UPDATE SKIP LOCKED`, evitando concorrência entre transações simultâneas. Tratamento de exceção para ausência de keys disponíveis, criação do teste de rollback e documentação da transação `fn_finalizar_pedido` no README. |                                                                                                                                                                                                                                                                           
+| 11  | Vitor da Silva Chaves | 11-12 | Criação das views de relatórios (vw_top_jogos_vendidos, vw_receita_por_mes, vw_media_avaliacao_por_jogo, vw_estoque_keys) e inserção dos dados iniciais (script 07) para testes das regras de negócio. Documentação das views e dados no README.                                                                                                                                                                                                                                                                             
+| 12  | - | 11-12 | (Trabalho da dupla assumido integralmente pelo Aluno  11) |                                                                                                                                                                                                                                                                                             |
 
 ---
 
@@ -117,9 +117,9 @@ psql -U postgres -d steamquest -f scripts/08_transacao_finalizar_pedido.sql
 | `03_indices.sql`                    | Dupla 3-4   | ✅ Pronto   |
 | `04_roles_permissoes.sql`           | Dupla 5-6   | ✅ Pronto   |
 | `05_funcoes_triggers.sql`           | Dupla 7-8   | ✅ Pronto   |
-| `06_views_relatorios.sql`           | Dupla 11-12 | ⬜ Pendente |
-| `07_dados_iniciais.sql`             | Dupla 11-12 | ⬜ Pendente |
-| `08_transacao_finalizar_pedido.sql` | Dupla 9-10  | ✅ Pronto |
+| `06_views_relatorios.sql`           | Dupla 11-12 | ✅ Pronto   |
+| `07_dados_iniciais.sql`             | Dupla 11-12 | ✅ Pronto   |
+| `08_transacao_finalizar_pedido.sql` | Dupla 9-10  | ✅ Pronto   |
 
 ---
 
@@ -296,10 +296,10 @@ Após a execução:
 
 _A preencher pela Dupla 11-12._
 
-- **`vw_top_jogos_vendidos`** — _A preencher_
-- **`vw_receita_por_mes`** — _A preencher_
-- **`vw_media_avaliacao_por_jogo`** — _A preencher_
-- **`vw_estoque_keys`** — _A preencher_
+- **`vw_top_jogos_vendidos`** Retorna o ranking dos jogos mais vendidos na plataforma, contabilizando o total de cópias e a receita gerada. Considera estritamente os pedidos com status 'finalizado'.
+- **`vw_receita_por_mes`** Calcula o faturamento total da loja agrupado por ano e mês, baseado unicamente nos pagamentos com status 'aprovado', facilitando o acompanhamento financeiro.
+- **`vw_media_avaliacao_por_jogo`** Exibe a nota média e o número total de avaliações de cada jogo, ordenando o catálogo dos títulos mais bem avaliados para os piores.
+- **`vw_estoque_keys`** Apresenta um painel de controle crítico do estoque digital, contabilizando de forma agregada quantas chaves estão disponíveis, vendidas, reservadas ou canceladas para cada jogo.
 
 ---
 
@@ -310,7 +310,11 @@ _A preencher pela Dupla 11-12._
      - Quantos usuários, jogos, keys, pedidos, avaliações
      - Estados variados (pedido pendente / finalizado / cancelado, etc) -->
 
-_A preencher pela Dupla 11-12._
+O banco foi populado com um conjunto robusto de dados para permitir a validação imediata de todas as regras de negócio, triggers e da transação principal do sistema. A carga (script 07) inclui:
+* **Cadastros Base:** 3 usuários ativos (com CPFs e emails únicos), 3 desenvolvedoras, 3 publicadoras e 3 categorias de jogos (JRPG, Hero Shooter, Ação TPS).
+* **Catálogo e Estoque:** 4 jogos variados vinculados às suas categorias e um lote de keys digitais exclusivas, distribuídas entre os status `disponivel` e `vendida`.
+* **Histórico de Vendas:** Simulação de 2 pedidos retroativos já concluídos, contendo a amarração completa de itens (jogos e keys), pagamentos aprovados e a consequente inserção dos jogos na tabela `biblioteca_usuario`.
+* **Interação Social:** Avaliações de jogos registradas pelos usuários com notas e comentários, testando o relacionamento entre as contas e o catálogo.
 
 ---
 
@@ -319,7 +323,11 @@ _A preencher pela Dupla 11-12._
 <!-- DUPLA 11-12 — coordenar; cada dupla pode adicionar o print da sua parte -->
 <!-- Salvar imagens em /prints/ e referenciá-las aqui. -->
 
-_A preencher._
+![Resultado das Views](Prints/print_view.png)
+*Consulta realizada nas views de relatórios.*
+
+![Dados Iniciais](Prints/print_dados.png)
+*Registros populados através do script 07 de dados iniciais.*
 
 ---
 
@@ -359,5 +367,5 @@ Regras garantidas pelo banco (via constraints, triggers e a transação):
 │   ├── 07_dados_iniciais.sql
 │   └── 08_transacao_finalizar_pedido.sql
 ├── prints/                  ← screenshots de execução
-└── docs/                    ← anotações extras
+└── docs/                    ← anotações extras 
 ```
